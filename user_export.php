@@ -38,7 +38,8 @@ last_name as lastname,
 	'' AS taxvat,
 	'' AS website_id,
 	'' AS password,
-ma.city as _address_company,
+ma.city as _address_city,
+'' as _address_company,
 ma.country as _address_country_id,
 ma.fax as _address_fax,
 first_name.firs_tname as _address_firstname,
@@ -96,8 +97,38 @@ LIMIT ".LIMIT_VALUE ;
 		$fp = fopen ( $this->home_dic . 'member.csv', 'w' );
 		
 		fputcsv ( $fp, array_keys($arrs[0]) );
-		
+		$last_email = '';
 		foreach ($arrs as $arr){
+			
+			if($last_email != $arr['email']){	//如果是新的
+				$last_email = $arr['email'];
+			}else{
+				$arr['email'] = '';
+				$arr['_website'] = '';
+				$arr['_store'] = '';
+				$arr['confirmation'] = '';
+				$arr['created_at'] = '';
+				$arr['created_in'] = '';
+				$arr['disable_auto_group_change'] = '';
+				$arr['dob'] = '';
+				$arr['firstname'] = '';
+				$arr['gender'] = '';
+				$arr['group_id'] = '';
+				$arr['lastname'] = '';
+				$arr['middlename'] = '';
+				$arr['password_hash'] = '';
+				$arr['prefix'] = '';
+				$arr['reward_update_notification'] = '';
+				$arr['reward_warning_notification'] = '';
+				$arr['rp_token'] = '';
+				$arr['rp_token_created_at'] = '';
+				$arr['store_id'] = '';
+				$arr['suffix'] = '';
+				$arr['taxvat'] = '';
+				$arr['website_id'] = '';
+				$arr['password'] = '';
+			}
+			
 			fputcsv ( $fp, array_values( $arr) );
 		}
 		
