@@ -14,7 +14,7 @@ class user {
 	
 	public function member(){
 		$sql = "SELECT
-	email.email,
+	lower(email.email) as email,
 	'base' AS _website,
 	'default' AS _store,
 	'' AS confirmation,
@@ -91,6 +91,7 @@ LEFT JOIN (
 ) last_name ON last_name.user_id = u.id 
 LEFT JOIN member_addresses ma ON ma.user_id = u.id
 WHERE u.user_group_id = '2'
+order by email asc
 LIMIT ".LIMIT_VALUE ;
 		$arrs = $this->source->get_all_arr($sql);
 		
