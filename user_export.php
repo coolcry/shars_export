@@ -13,6 +13,9 @@ class user {
 	}
 	
 	public function member(){
+		
+		$dc = $this->us_ca();
+		
 		$sql = "SELECT
 	lower(email.email) as email,
 	'base' AS _website,
@@ -29,8 +32,8 @@ last_name as lastname,
 	'' AS middlename,
 	'' AS password_hash,
 	'' AS prefix,
-	'' AS reward_update_notification,
-	'' AS reward_warning_notification,
+	'1' AS reward_update_notification,
+	'1' AS reward_warning_notification,
 	'' AS rp_token,
 	'' AS rp_token_created_at,
 	'1' AS store_id,
@@ -129,11 +132,29 @@ LIMIT ".LIMIT_VALUE ;
 				$arr['website_id'] = '';
 				$arr['password'] = '';
 			}
-			
+			$arr['_address_telephone'] = $arr['_address_telephone'] ?$arr['_address_telephone']:'0';
+			$arr['_address_region'] = ($foo = $dc[$arr['_address_region']])?$foo:$arr['_address_region'];
 			fputcsv ( $fp, array_values( $arr) );
 		}
 		
 		fclose ( $fp );
+	}
+	
+	private function us_ca(){
+		$dc = array();
+		$ca = file_get_contents('./ca.txt');
+		foreach (split("\r\n", $ca) as $r){
+			list($k,$v) = split("\t", $r);
+			$dc[$k] = $v;
+		} ;
+		
+		$us = file_get_contents('./us.txt');
+		foreach (split("\r\n", $us) as $r){
+			list($v,$k) = split("\t", $r);
+			$dc[$k] = $v;
+		} ;
+		
+		return $dc;
 	}
 }
 
